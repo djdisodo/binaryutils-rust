@@ -1,5 +1,4 @@
 extern crate byteorder;
-
 use std::io::Cursor;
 use std::ops::{BitOrAssign, Add};
 use self::byteorder::{ReadBytesExt, WriteBytesExt, BigEndian, LittleEndian};
@@ -9,8 +8,8 @@ pub enum Endian {
 	Big = 0,
 	Little = 1,
 }
-
 pub fn read_short(bytes: Vec<u8>, endian: Endian) -> i16 {
+	extend_binary_stream!(daf);
 	match endian {
 		Big => return Cursor::read_i16::<BigEndian>(&mut Cursor::new(bytes)).unwrap(),
 		Little => return Cursor::read_i16::<LittleEndian>(&mut Cursor::new(bytes)).unwrap()

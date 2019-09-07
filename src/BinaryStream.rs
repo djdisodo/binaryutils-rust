@@ -1,8 +1,14 @@
+#![macro_escape]
+
+
+#[macro_use]
+
 use std::io::Write;
 use std::ops::{Add, AddAssign};
 use std::iter::FromIterator;
 use crate::binary::*;
-#[macro_export]
+
+
 pub trait BinaryStream {
 	fn reset(&mut self);
 	fn rewind(&mut self);
@@ -46,6 +52,7 @@ pub trait BinaryStream {
 	fn put_var_long(&mut self, v : i64, endian : Endian);
 	fn feof(&self) -> bool;
 }
+#[macro_export]
 macro_rules! extend_binary_stream {
 	($s:expr) => (impl BinaryStream for $s {
 	fn reset(&mut self) {
