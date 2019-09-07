@@ -2,7 +2,7 @@ use std::io::Write;
 use std::ops::{Add, AddAssign};
 use std::iter::FromIterator;
 use crate::binary::*;
-
+#[macro_export]
 pub trait BinaryStream {
 	fn reset(&mut self);
 	fn rewind(&mut self);
