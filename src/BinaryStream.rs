@@ -4,7 +4,6 @@ use std::iter::FromIterator;
 use crate::binary::*;
 
 pub trait BinaryStream {
-	fn new(buffer : Vec<u8>, offset : usize) -> Self;
 	fn reset(&mut self);
 	fn rewind(&mut self);
 	fn set_offset(&mut self, offset : usize);
