@@ -1,22 +1,54 @@
-use std::io::{Write, Cursor};
+use std::io::Write;
 use std::ops::{Add, AddAssign};
-use std::fmt::Error;
-use std::convert::TryInto;
 use std::iter::FromIterator;
-use byteorder::{BigEndian, ReadBytesExt, WriteBytesExt, LittleEndian};
 use crate::binary::*;
 
-struct BinaryStream {
-	offset : usize,
-	buffer : Vec<u8>
+pub trait BinaryStream {
+	fn new(buffer : Vec<u8>, offset : usize) -> Self;
+	fn reset(&mut self);
+	fn rewind(&mut self);
+	fn set_offset(&mut self, offset : usize);
+	fn set_buffer(&mut self, buffer : Vec<u8>, offset : usize);
+	fn get_offset(&self) -> usize;
+	fn get_buffer(&self) -> &Vec<u8>;
+	fn get(&mut self, len : usize) -> Vec<u8>;
+	fn get_remaining(&mut self) -> Vec<u8>;
+	fn put(&mut self, bytes : Vec<u8>);
+	fn get_bool(&mut self) -> bool;
+	fn put_bool(&mut self, v : bool);
+	fn get_byte(&mut self) -> u8;
+	fn put_byte(&mut self, v : u8);
+	fn get_short(&mut self, endian : Endian) -> i16;
+	fn get_unsigned_short(&mut self, endian : Endian) -> u16;
+	fn put_short(&mut self, v : i16, endian : Endian);
+	fn put_unsigned_short(&mut self, v : u16, endian : Endian);
+	fn get_triad(&mut self, endian : Endian) -> i32;
+	fn get_unsigned_triad(&mut self, endian : Endian) -> u32;
+	fn put_triad(&mut self, v : i32, endian : Endian);
+	fn put_unsigned_triad(&mut self, v : u32, endian : Endian);
+	fn get_int(&mut self, endian : Endian) -> i32;
+	fn get_unsigned_int(&mut self, endian : Endian) -> u32;
+	fn put_int(&mut self, v : i32, endian : Endian);
+	fn put_unsigned_int(&mut self, v : u32, endian : Endian);
+	fn get_float(&mut self, endian : Endian) -> f32;
+	fn put_float(&mut self, v : f32, endian : Endian);
+	fn get_double(&mut self, endian : Endian) -> f64;
+	fn get_long(&mut self, endian : Endian) -> i64;
+	fn get_unsigned_long(&mut self, endian : Endian) -> u64;
+	fn put_long(&mut self, v : i64, endian : Endian);
+	fn put_unsigned_long(&mut self, v : u64, endian : Endian);
+	fn get_unsigned_var_int(&mut self, endian : Endian) -> u32;
+	fn put_unsigned_var_int(&mut self, v : u32, endian : Endian);
+	fn get_var_int(&mut self, endian : Endian) -> i32;
+	fn put_var_int(&mut self, v : i32, endian : Endian);
+	fn get_unsigned_var_long(&mut self, endian : Endian) -> u64;
+	fn put_unsigned_var_long(&mut self, v : u64, endian : Endian);
+	fn get_var_long(&mut self, endian : Endian) -> i64;
+	fn put_var_long(&mut self, v : i64, endian : Endian);
+	fn feof(&self) -> bool;
 }
-impl BinaryStream {
-	fn new(buffer : Vec<u8>, offset : usize) -> Self {
-		return BinaryStream {
-			buffer,
-			offset
-		};
-	}
+macro_rules! extend_binary_stream {
+	($s:expr) => (impl BinaryStream for $s {
 	fn reset(&mut self) {
 		self.rewind();
 		self.buffer.flush().unwrap();
@@ -164,4 +196,5 @@ impl BinaryStream {
 	fn feof(&self) -> bool{
 		return self.get_buffer().len() < self.get_offset();
 	}
+})
 }
