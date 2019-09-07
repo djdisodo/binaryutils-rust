@@ -1,5 +1,5 @@
 [package]
-name = "binaryutils-rust"
+name = "binaryutils"
 version = "0.1.0"
 authors = ["djdisodo <djdisodo@gmail.com>"]
 edition = "2018"
