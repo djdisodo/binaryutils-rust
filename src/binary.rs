@@ -2,14 +2,11 @@ extern crate byteorder;
 use std::io::Cursor;
 use std::ops::{BitOrAssign, Add};
 use self::byteorder::{ReadBytesExt, WriteBytesExt, BigEndian, LittleEndian};
-
-#[derive(Clone, Copy)]
 pub enum Endian {
 	Big = 0,
 	Little = 1,
 }
 pub fn read_short(bytes: Vec<u8>, endian: Endian) -> i16 {
-	extend_binary_stream!(daf);
 	match endian {
 		Big => return Cursor::read_i16::<BigEndian>(&mut Cursor::new(bytes)).unwrap(),
 		Little => return Cursor::read_i16::<LittleEndian>(&mut Cursor::new(bytes)).unwrap()
@@ -44,26 +41,32 @@ pub fn write_unsigned_short(v: u16, endian: Endian) -> Vec<u8> {
 pub fn read_triad(bytes: Vec<u8>, endian: Endian) -> i32 {
 	let mut bytes: Vec<u8> = Vec::from(bytes);
 	match endian {
-		Little => bytes.reverse(),
-		_ => {}
-	}
-	bytes.push(0);
-	match endian {
-		Big => return Cursor::read_i32::<BigEndian>(&mut Cursor::new(bytes)).unwrap(),
-		Little => return Cursor::read_i32::<LittleEndian>(&mut Cursor::new(bytes)).unwrap()
+		Big => {
+			bytes.push(0);
+			return Cursor::read_i32::<BigEndian>(&mut Cursor::new(bytes)).unwrap()
+		},
+		Little => {
+			bytes.reverse();
+			bytes.push(0);
+			bytes.reverse();
+			return Cursor::read_i32::<LittleEndian>(&mut Cursor::new(bytes)).unwrap()
+		}
 	}
 }
 
 pub fn read_unsigned_triad(bytes: Vec<u8>, endian: Endian) -> u32 {
 	let mut bytes: Vec<u8> = Vec::from(bytes);
 	match endian {
-		Little => bytes.reverse(),
-		_ => {}
-	}
-	bytes.push(0);
-	match endian {
-		Big => return Cursor::read_u32::<BigEndian>(&mut Cursor::new(bytes)).unwrap(),
-		Little => return Cursor::read_u32::<LittleEndian>(&mut Cursor::new(bytes)).unwrap()
+		Big => {
+			bytes.push(0);
+			return Cursor::read_u32::<BigEndian>(&mut Cursor::new(bytes)).unwrap()
+		},
+		Little => {
+			bytes.reverse();
+			bytes.push(0);
+			bytes.reverse();
+			return Cursor::read_u32::<LittleEndian>(&mut Cursor::new(bytes)).unwrap()
+		}
 	}
 }
 
