@@ -8,6 +8,15 @@ pub struct BinaryStreamStruct {
 	offset: usize,
 }
 
+impl BinaryStreamStruct {
+	fn new(buffer : Vec<u8>, offset : usize) -> BinaryStreamStruct{
+		return BinaryStreamStruct {
+			buffer,
+			offset
+		};
+	}
+}
+
 pub trait BinaryStream {
 	fn get_binary_stream_ref(&self) -> &BinaryStreamStruct;
 	fn get_binary_stream_mut(&mut self) -> &mut BinaryStreamStruct;
