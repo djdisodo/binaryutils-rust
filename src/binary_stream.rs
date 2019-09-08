@@ -9,7 +9,7 @@ pub struct BinaryStreamStruct {
 }
 
 impl BinaryStreamStruct {
-	fn new(buffer : Vec<u8>, offset : usize) -> BinaryStreamStruct{
+	pub fn new(buffer : Vec<u8>, offset : usize) -> BinaryStreamStruct{
 		return BinaryStreamStruct {
 			buffer,
 			offset
