@@ -2,24 +2,24 @@ use std::io::Write;
 use std::ops::{Add, AddAssign};
 use std::iter::FromIterator;
 use crate::binary::*;
+use crate::binary_stream::BinaryStreamTrait;
 
-pub struct BinaryStreamStruct {
+pub struct BinaryStream {
 	buffer: Vec<u8>,
 	offset: usize,
 }
 
-impl BinaryStreamStruct {
-	pub fn new(buffer : Vec<u8>, offset : usize) -> BinaryStreamStruct{
-		return BinaryStreamStruct {
+impl BinaryStream {
+	fn new(buffer : Vec<u8>, offset : usize) -> BinaryStream{
+		return BinaryStream {
 			buffer,
 			offset
 		};
 	}
 }
 
-pub trait BinaryStream {
-	fn get_binary_stream_ref(&self) -> &BinaryStreamStruct;
-	fn get_binary_stream_mut(&mut self) -> &mut BinaryStreamStruct;
+pub trait BinaryStreamTrait {
+	get_self!(BinaryStream);
 	fn reset(&mut self) {
 		self.rewind();
 		self.get_binary_stream_mut().buffer.flush().unwrap();
