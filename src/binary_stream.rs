@@ -9,7 +9,7 @@ pub struct BinaryStream {
 }
 
 impl BinaryStream {
-	fn new(buffer : Vec<u8>, offset : usize) -> BinaryStream{
+	pub fn new(buffer : Vec<u8>, offset : usize) -> BinaryStream{
 		return BinaryStream {
 			buffer,
 			offset
@@ -18,8 +18,12 @@ impl BinaryStream {
 }
 
 pub trait BinaryStreamTrait {
-	fn get_binary_stream_ref(&self) -> &BinaryStream;
-	fn get_binary_stream_mut(&self) -> &mut BinaryStream;
+	fn get_binary_stream_ref(&self) -> &BinaryStream {
+		unimplemented!();
+	}
+	fn get_binary_stream_mut(&self) -> &mut BinaryStream  {
+		unimplemented!();
+	}
 	fn reset(&mut self) {
 		self.rewind();
 		self.get_binary_stream_mut().buffer.flush().unwrap();
