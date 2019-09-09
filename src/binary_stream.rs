@@ -19,7 +19,8 @@ impl BinaryStream {
 }
 
 pub trait BinaryStreamTrait {
-	get_self!(BinaryStream);
+	fn get_binary_stream_ref(&self) -> &BinaryStreamTrait;
+	fn get_binary_stream_mut(&self) -> &mut BinaryStreamTrait;
 	fn reset(&mut self) {
 		self.rewind();
 		self.get_binary_stream_mut().buffer.flush().unwrap();
