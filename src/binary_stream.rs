@@ -2,7 +2,6 @@ use std::io::Write;
 use std::ops::{Add, AddAssign};
 use std::iter::FromIterator;
 use crate::binary::*;
-use crate::binary_stream::BinaryStreamTrait;
 
 pub struct BinaryStream {
 	buffer: Vec<u8>,
@@ -19,8 +18,8 @@ impl BinaryStream {
 }
 
 pub trait BinaryStreamTrait {
-	fn get_binary_stream_ref(&self) -> &BinaryStreamTrait;
-	fn get_binary_stream_mut(&self) -> &mut BinaryStreamTrait;
+	fn get_binary_stream_ref(&self) -> &BinaryStream;
+	fn get_binary_stream_mut(&self) -> &mut BinaryStream;
 	fn reset(&mut self) {
 		self.rewind();
 		self.get_binary_stream_mut().buffer.flush().unwrap();
