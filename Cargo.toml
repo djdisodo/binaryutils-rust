@@ -8,4 +8,3 @@ edition = "2018"
 
 [dependencies]
 byteorder = "0.3.11"
-get-self = { git = "https://github.com/djdisodo/get-self" }
