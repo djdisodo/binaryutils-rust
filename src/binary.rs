@@ -1,6 +1,6 @@
 extern crate byteorder;
 use std::io::Cursor;
-use std::ops::{BitOrAssign, Add};
+use std::ops::{BitOrAssign, Add, AddAssign};
 use self::byteorder::{ReadBytesExt, WriteBytesExt, BigEndian, LittleEndian};
 pub enum Endian {
 	Big = 0,
@@ -253,7 +253,7 @@ pub fn read_unsigned_var_long(bytes: Vec<u8>, read_bytes : &mut u8 /* stores cou
 		}
 		v.bitor_assign(((bytes.get(i).unwrap().clone() as u64) & 0x7f) << (i * 7) as u64);
 		if bytes.get(i).unwrap() & 0x80 == 0 {
-			read_bytes.add(i as u8);
+			read_bytes.add_assign(i as u8);
 			return v;
 		}
 	}
