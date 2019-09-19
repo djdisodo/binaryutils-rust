@@ -1,6 +1,6 @@
 extern crate byteorder;
 use std::io::Cursor;
-use std::ops::{BitOrAssign, Add, AddAssign};
+use std::ops::BitOrAssign;
 use self::byteorder::{ReadBytesExt, WriteBytesExt, BigEndian, LittleEndian};
 pub enum Endian {
 	Big = 0,
@@ -118,7 +118,7 @@ pub fn read_unsigned_int(bytes: Vec<u8>, endian: Endian) -> u32 {
 	}
 }
 
-pub fn write_int(v: i32, endian : Endian) -> Vec<u8> {
+pub fn write_int(v: i32, endian: Endian) -> Vec<u8> {
 	let mut bytes: Vec<u8> = Vec::new();
 	match endian {
 		Endian::Big => bytes.write_i32::<BigEndian>(v).unwrap(),
@@ -214,7 +214,7 @@ pub fn read_unsigned_var_int(bytes: Vec<u8>, read_bytes : &mut u8 /* stores coun
 		}
 		v.bitor_assign(((bytes.get(i).unwrap().clone() as u32) & 0x7f) << (i * 7) as u32);
 		if bytes.get(i).unwrap() & 0x80 == 0 {
-			read_bytes.add(i as u8);
+			*read_bytes += i as u8;
 			return v;
 		}
 	}
@@ -227,7 +227,7 @@ pub fn write_var_int(v: i32) -> Vec<u8> {
 
 pub fn write_unsigned_var_int(mut v: u32) -> Vec<u8> {
 	let mut bytes: Vec<u8> = Vec::new();
-	for i in 0..5 {
+	for _i in 0..5 {
 		if (v >> 7) != 0 {
 			bytes.push((v | 0x80) as u8);
 		} else {
@@ -253,7 +253,7 @@ pub fn read_unsigned_var_long(bytes: Vec<u8>, read_bytes : &mut u8 /* stores cou
 		}
 		v.bitor_assign(((bytes.get(i).unwrap().clone() as u64) & 0x7f) << (i * 7) as u64);
 		if bytes.get(i).unwrap() & 0x80 == 0 {
-			read_bytes.add_assign(i as u8);
+			*read_bytes += i as u8;
 			return v;
 		}
 	}
@@ -266,7 +266,7 @@ pub fn write_var_long(v: i64) -> Vec<u8> {
 
 pub fn write_unsigned_var_long(mut v: u64) -> Vec<u8> {
 	let mut bytes: Vec<u8> = Vec::new();
-	for i in 0..10 {
+	for _i in 0..10 {
 		if (v >> 7) != 0 {
 			bytes.push((v | 0x80) as u8);
 		} else {
