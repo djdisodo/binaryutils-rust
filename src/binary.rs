@@ -8,23 +8,23 @@ pub enum Endian {
 }
 pub fn read_short(bytes: Vec<u8>, endian: Endian) -> i16 {
 	match endian {
-		Big => return Cursor::read_i16::<BigEndian>(&mut Cursor::new(bytes)).unwrap(),
-		Little => return Cursor::read_i16::<LittleEndian>(&mut Cursor::new(bytes)).unwrap()
+		Endian::Big => return Cursor::read_i16::<BigEndian>(&mut Cursor::new(bytes)).unwrap(),
+		Endian::Little => return Cursor::read_i16::<LittleEndian>(&mut Cursor::new(bytes)).unwrap()
 	}
 }
 
 pub fn read_unsigned_short(bytes: Vec<u8>, endian: Endian) -> u16 {
 	match endian {
-		Big => return Cursor::read_u16::<BigEndian>(&mut Cursor::new(bytes)).unwrap(),
-		Little => return Cursor::read_u16::<LittleEndian>(&mut Cursor::new(bytes)).unwrap()
+		Endian::Big => return Cursor::read_u16::<BigEndian>(&mut Cursor::new(bytes)).unwrap(),
+		Endian::Little => return Cursor::read_u16::<LittleEndian>(&mut Cursor::new(bytes)).unwrap()
 	}
 }
 
 pub fn write_short(v: i16, endian: Endian) -> Vec<u8> {
 	let mut bytes: Vec<u8> = Vec::new();
 	match endian {
-		Big => bytes.write_i16::<BigEndian>(v).unwrap(),
-		Little => bytes.write_i16::<LittleEndian>(v).unwrap()
+		Endian::Big => bytes.write_i16::<BigEndian>(v).unwrap(),
+		Endian::Little => bytes.write_i16::<LittleEndian>(v).unwrap()
 	}
 	return bytes;
 }
@@ -32,8 +32,8 @@ pub fn write_short(v: i16, endian: Endian) -> Vec<u8> {
 pub fn write_unsigned_short(v: u16, endian: Endian) -> Vec<u8> {
 	let mut bytes: Vec<u8> = Vec::new();
 	match endian {
-		Big => bytes.write_u16::<BigEndian>(v).unwrap(),
-		Little => bytes.write_u16::<LittleEndian>(v).unwrap()
+		Endian::Big => bytes.write_u16::<BigEndian>(v).unwrap(),
+		Endian::Little => bytes.write_u16::<LittleEndian>(v).unwrap()
 	}
 	return bytes;
 }
@@ -41,11 +41,11 @@ pub fn write_unsigned_short(v: u16, endian: Endian) -> Vec<u8> {
 pub fn read_triad(bytes: Vec<u8>, endian: Endian) -> i32 {
 	let mut bytes: Vec<u8> = Vec::from(bytes);
 	match endian {
-		Big => {
+		Endian::Big => {
 			bytes.push(0);
 			return Cursor::read_i32::<BigEndian>(&mut Cursor::new(bytes)).unwrap()
 		},
-		Little => {
+		Endian::Little => {
 			bytes.reverse();
 			bytes.push(0);
 			bytes.reverse();
@@ -57,11 +57,11 @@ pub fn read_triad(bytes: Vec<u8>, endian: Endian) -> i32 {
 pub fn read_unsigned_triad(bytes: Vec<u8>, endian: Endian) -> u32 {
 	let mut bytes: Vec<u8> = Vec::from(bytes);
 	match endian {
-		Big => {
+		Endian::Big => {
 			bytes.push(0);
 			return Cursor::read_u32::<BigEndian>(&mut Cursor::new(bytes)).unwrap()
 		},
-		Little => {
+		Endian::Little => {
 			bytes.reverse();
 			bytes.push(0);
 			bytes.reverse();
@@ -73,11 +73,11 @@ pub fn read_unsigned_triad(bytes: Vec<u8>, endian: Endian) -> u32 {
 pub fn write_triad(v: i32, endian: Endian) -> Vec<u8> {
 	let mut bytes: Vec<u8> = Vec::new();
 	match endian {
-		Big => {
+		Endian::Big => {
 			bytes.write_i32::<BigEndian>(v).unwrap();
 			bytes.resize(3, 0);
 		}
-		Little => {
+		Endian::Little => {
 			bytes.write_i32::<LittleEndian>(v).unwrap();
 			bytes.reverse();
 			bytes.resize(3, 0);
@@ -90,11 +90,11 @@ pub fn write_triad(v: i32, endian: Endian) -> Vec<u8> {
 pub fn write_unsigned_triad(v: u32, endian: Endian) -> Vec<u8> {
 	let mut bytes: Vec<u8> = Vec::new();
 	match endian {
-		Big => {
+		Endian::Big => {
 			bytes.write_u32::<BigEndian>(v).unwrap();
 			bytes.resize(3, 0);
 		}
-		Little => {
+		Endian::Little => {
 			bytes.write_u32::<LittleEndian>(v).unwrap();
 			bytes.reverse();
 			bytes.resize(3, 0);
@@ -106,23 +106,23 @@ pub fn write_unsigned_triad(v: u32, endian: Endian) -> Vec<u8> {
 
 pub fn read_int(bytes: Vec<u8>, endian: Endian) -> i32 {
 	match endian {
-		Big => return Cursor::read_i32::<BigEndian>(&mut Cursor::new(bytes)).unwrap(),
-		Little => return Cursor::read_i32::<LittleEndian>(&mut Cursor::new(bytes)).unwrap()
+		Endian::Big => return Cursor::read_i32::<BigEndian>(&mut Cursor::new(bytes)).unwrap(),
+		Endian::Little => return Cursor::read_i32::<LittleEndian>(&mut Cursor::new(bytes)).unwrap()
 	}
 }
 
 pub fn read_unsigned_int(bytes: Vec<u8>, endian: Endian) -> u32 {
 	match endian {
-		Big => return Cursor::read_u32::<BigEndian>(&mut Cursor::new(bytes)).unwrap(),
-		Little => return Cursor::read_u32::<LittleEndian>(&mut Cursor::new(bytes)).unwrap()
+		Endian::Big => return Cursor::read_u32::<BigEndian>(&mut Cursor::new(bytes)).unwrap(),
+		Endian::Little => return Cursor::read_u32::<LittleEndian>(&mut Cursor::new(bytes)).unwrap()
 	}
 }
 
-pub fn write_int(v: i32, endian: Endian) -> Vec<u8> {
+pub fn write_int(v: i32, endian : Endian) -> Vec<u8> {
 	let mut bytes: Vec<u8> = Vec::new();
 	match endian {
-		Big => bytes.write_i32::<BigEndian>(v).unwrap(),
-		Little => bytes.write_i32::<LittleEndian>(v).unwrap()
+		Endian::Big => bytes.write_i32::<BigEndian>(v).unwrap(),
+		Endian::Little => bytes.write_i32::<LittleEndian>(v).unwrap()
 	}
 	return bytes;
 }
@@ -130,63 +130,63 @@ pub fn write_int(v: i32, endian: Endian) -> Vec<u8> {
 pub fn write_unsigned_int(v: u32, endian: Endian) -> Vec<u8> {
 	let mut bytes: Vec<u8> = Vec::new();
 	match endian {
-		Big => bytes.write_u32::<BigEndian>(v).unwrap(),
-		Little => bytes.write_u32::<LittleEndian>(v).unwrap()
+		Endian::Big => bytes.write_u32::<BigEndian>(v).unwrap(),
+		Endian::Little => bytes.write_u32::<LittleEndian>(v).unwrap()
 	}
 	return bytes;
 }
 
 pub fn read_float(bytes: Vec<u8>, endian: Endian) -> f32 {
 	match endian {
-		Big => return Cursor::read_f32::<BigEndian>(&mut Cursor::new(bytes)).unwrap(),
-		Little => return Cursor::read_f32::<LittleEndian>(&mut Cursor::new(bytes)).unwrap()
+		Endian::Big => return Cursor::read_f32::<BigEndian>(&mut Cursor::new(bytes)).unwrap(),
+		Endian::Little => return Cursor::read_f32::<LittleEndian>(&mut Cursor::new(bytes)).unwrap()
 	}
 }
 
 pub fn write_float(v: f32, endian: Endian) -> Vec<u8> {
 	let mut bytes: Vec<u8> = Vec::new();
 	match endian {
-		Big => bytes.write_f32::<BigEndian>(v).unwrap(),
-		Little => bytes.write_f32::<LittleEndian>(v).unwrap()
+		Endian::Big => bytes.write_f32::<BigEndian>(v).unwrap(),
+		Endian::Little => bytes.write_f32::<LittleEndian>(v).unwrap()
 	}
 	return bytes;
 }
 
 pub fn read_double(bytes: Vec<u8>, endian: Endian) -> f64 {
 	match endian {
-		Big => return Cursor::read_f64::<BigEndian>(&mut Cursor::new(bytes)).unwrap(),
-		Little => return Cursor::read_f64::<LittleEndian>(&mut Cursor::new(bytes)).unwrap()
+		Endian::Big => return Cursor::read_f64::<BigEndian>(&mut Cursor::new(bytes)).unwrap(),
+		Endian::Little => return Cursor::read_f64::<LittleEndian>(&mut Cursor::new(bytes)).unwrap()
 	}
 }
 
 pub fn write_double(v: f64, endian: Endian) -> Vec<u8> {
 	let mut bytes: Vec<u8> = Vec::new();
 	match endian {
-		Big => bytes.write_f64::<BigEndian>(v).unwrap(),
-		Little => bytes.write_f64::<LittleEndian>(v).unwrap()
+		Endian::Big => bytes.write_f64::<BigEndian>(v).unwrap(),
+		Endian::Little => bytes.write_f64::<LittleEndian>(v).unwrap()
 	}
 	return bytes;
 }
 
 pub fn read_long(bytes: Vec<u8>, endian: Endian) -> i64 {
 	match endian {
-		Big => return Cursor::read_i64::<BigEndian>(&mut Cursor::new(bytes)).unwrap(),
-		Little => return Cursor::read_i64::<LittleEndian>(&mut Cursor::new(bytes)).unwrap()
+		Endian::Big => return Cursor::read_i64::<BigEndian>(&mut Cursor::new(bytes)).unwrap(),
+		Endian::Little => return Cursor::read_i64::<LittleEndian>(&mut Cursor::new(bytes)).unwrap()
 	}
 }
 
 pub fn read_unsigned_long(bytes: Vec<u8>, endian: Endian) -> u64 {
 	match endian {
-		Big => return Cursor::read_u64::<BigEndian>(&mut Cursor::new(bytes)).unwrap(),
-		Little => return Cursor::read_u64::<LittleEndian>(&mut Cursor::new(bytes)).unwrap()
+		Endian::Big => return Cursor::read_u64::<BigEndian>(&mut Cursor::new(bytes)).unwrap(),
+		Endian::Little => return Cursor::read_u64::<LittleEndian>(&mut Cursor::new(bytes)).unwrap()
 	}
 }
 
 pub fn write_long(v: i64, endian: Endian) -> Vec<u8> {
 	let mut bytes: Vec<u8> = Vec::new();
 	match endian {
-		Big => bytes.write_i64::<BigEndian>(v).unwrap(),
-		Little => bytes.write_i64::<LittleEndian>(v).unwrap()
+		Endian::Big => bytes.write_i64::<BigEndian>(v).unwrap(),
+		Endian::Little => bytes.write_i64::<LittleEndian>(v).unwrap()
 	}
 	return bytes;
 }
@@ -194,8 +194,8 @@ pub fn write_long(v: i64, endian: Endian) -> Vec<u8> {
 pub fn write_unsigned_long(v: u64, endian: Endian) -> Vec<u8> {
 	let mut bytes: Vec<u8> = Vec::new();
 	match endian {
-		Big => bytes.write_u64::<BigEndian>(v).unwrap(),
-		Little => bytes.write_u64::<LittleEndian>(v).unwrap()
+		Endian::Big => bytes.write_u64::<BigEndian>(v).unwrap(),
+		Endian::Little => bytes.write_u64::<LittleEndian>(v).unwrap()
 	}
 	return bytes;
 }
