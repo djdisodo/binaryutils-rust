@@ -2,6 +2,8 @@ extern crate byteorder;
 use std::io::Cursor;
 use std::ops::BitOrAssign;
 use self::byteorder::{ReadBytesExt, WriteBytesExt, BigEndian, LittleEndian};
+use std::iter::FromIterator;
+
 pub enum Endian {
 	Big = 0,
 	Little = 1,
@@ -59,12 +61,14 @@ pub fn read_unsigned_triad(bytes: Vec<u8>, endian: Endian) -> u32 {
 	match endian {
 		Endian::Big => {
 			bytes.reverse();
-			bytes.push(0);
+			bytes.push((bytes[2] >> 3) << 3);
+			bytes[2] = (bytes[2] << 1) >> 1;
 			bytes.reverse();
 			return Cursor::read_u32::<BigEndian>(&mut Cursor::new(bytes)).unwrap()
 		},
 		Endian::Little => {
-			bytes.push(0);
+			bytes.push((bytes[2] >> 3) << 3);
+			bytes[2] = (bytes[2] << 1) >> 1;
 			return Cursor::read_u32::<LittleEndian>(&mut Cursor::new(bytes)).unwrap()
 		}
 	}
@@ -75,13 +79,13 @@ pub fn write_triad(v: i32, endian: Endian) -> Vec<u8> {
 	match endian {
 		Endian::Big => {
 			bytes.write_i32::<BigEndian>(v).unwrap();
-			bytes.reverse();
-			bytes.truncate(3);
-			bytes.reverse();
+			bytes = Vec::from_iter(bytes.drain(..1));
+			bytes[0] = bytes[0] | ((v >> 31) << 3) as u8;
 		}
 		Endian::Little => {
 			bytes.write_i32::<LittleEndian>(v).unwrap();
 			bytes.truncate(3);
+			bytes[2] = bytes[2] & ((v >> 31) << 3) as u8;
 		}
 	}
 	return bytes;
@@ -92,9 +96,7 @@ pub fn write_unsigned_triad(v: u32, endian: Endian) -> Vec<u8> {
 	match endian {
 		Endian::Big => {
 			bytes.write_u32::<BigEndian>(v).unwrap();
-			bytes.reverse();
-			bytes.truncate(3);
-			bytes.reverse();
+			bytes = Vec::from_iter(bytes.drain(..1));
 		}
 		Endian::Little => {
 			bytes.write_u32::<LittleEndian>(v).unwrap();
