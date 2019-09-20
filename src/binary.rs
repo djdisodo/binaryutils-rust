@@ -75,12 +75,12 @@ pub fn write_triad(v: i32, endian: Endian) -> Vec<u8> {
 	match endian {
 		Endian::Big => {
 			bytes.write_i32::<BigEndian>(v).unwrap();
-			bytes.resize(3, 0);
+			bytes.truncate(3);
 		}
 		Endian::Little => {
 			bytes.write_i32::<LittleEndian>(v).unwrap();
 			bytes.reverse();
-			bytes.resize(3, 0);
+			bytes.truncate(3);
 			bytes.reverse();
 		}
 	}
@@ -92,12 +92,12 @@ pub fn write_unsigned_triad(v: u32, endian: Endian) -> Vec<u8> {
 	match endian {
 		Endian::Big => {
 			bytes.write_u32::<BigEndian>(v).unwrap();
-			bytes.resize(3, 0);
+			bytes.truncate(3);
 		}
 		Endian::Little => {
 			bytes.write_u32::<LittleEndian>(v).unwrap();
 			bytes.reverse();
-			bytes.resize(3, 0);
+			bytes.truncate(3);
 			bytes.reverse();
 		}
 	}
