@@ -84,10 +84,10 @@ impl BinaryStream {
 		return read_unsigned_triad(self.get(3), endian);
 	}
 	pub fn put_triad(&mut self, v: i32, endian: Endian) {
-		self.put(write_triad(v, endian).to_vec());
+		self.put(write_triad(v, endian));
 	}
 	pub fn put_unsigned_triad(&mut self, v: u32, endian: Endian) {
-		self.put(write_unsigned_triad(v, endian).to_vec());
+		self.put(write_unsigned_triad(v, endian));
 	}
 	pub fn get_int(&mut self, endian: Endian) -> i32 {
 		return read_int(self.get(4), endian);
@@ -96,16 +96,16 @@ impl BinaryStream {
 		return read_unsigned_int(self.get(4), endian);
 	}
 	pub fn put_int(&mut self, v: i32, endian: Endian) {
-		self.put(write_int(v, endian).to_vec());
+		self.put(write_int(v, endian));
 	}
 	pub fn put_unsigned_int(&mut self, v: u32, endian: Endian) {
-		self.put(write_unsigned_int(v, endian).to_vec());
+		self.put(write_unsigned_int(v, endian));
 	}
 	pub fn get_float(&mut self, endian: Endian) -> f32 {
 		return read_float(self.get(4), endian);
 	}
 	pub fn put_float(&mut self, v: f32, endian: Endian) {
-		self.put(write_float(v, endian).to_vec());
+		self.put(write_float(v, endian));
 	}
 	pub fn get_double(&mut self, endian: Endian) -> f64 {
 		return read_double(self.get(8), endian);
@@ -117,10 +117,10 @@ impl BinaryStream {
 		return read_unsigned_long(self.get(8), endian);
 	}
 	pub fn put_long(&mut self, v: i64, endian: Endian) {
-		self.put(write_long(v, endian).to_vec());
+		self.put(write_long(v, endian));
 	}
 	pub fn put_unsigned_long(&mut self, v: u64, endian: Endian) {
-		self.put(write_unsigned_long(v, endian).to_vec());
+		self.put(write_unsigned_long(v, endian));
 	}
 	pub fn get_unsigned_var_int(&mut self) -> u32 {
 		let mut read_bytes: u8 = 0;
@@ -129,7 +129,7 @@ impl BinaryStream {
 		return result;
 	}
 	pub fn put_unsigned_var_int(&mut self, v: u32) {
-		self.put(write_unsigned_var_int(v).to_vec());
+		self.put(write_unsigned_var_int(v));
 	}
 	pub fn get_var_int(&mut self) -> i32 {
 		let mut read_bytes: u8 = 0;
@@ -138,7 +138,7 @@ impl BinaryStream {
 		return result;
 	}
 	pub fn put_var_int(&mut self, v: i32) {
-		self.put(write_var_int(v).to_vec());
+		self.put(write_var_int(v));
 	}
 	pub fn get_unsigned_var_long(&mut self) -> u64 {
 		let mut read_bytes: u8 = 0;
@@ -147,7 +147,7 @@ impl BinaryStream {
 		return result;
 	}
 	pub fn put_unsigned_var_long(&mut self, v: u64) {
-		self.put(write_unsigned_var_long(v).to_vec());
+		self.put(write_unsigned_var_long(v));
 	}
 	pub fn get_var_long(&mut self) -> i64 {
 		let mut read_bytes: u8 = 0;
@@ -156,7 +156,7 @@ impl BinaryStream {
 		return result;
 	}
 	pub fn put_var_long(&mut self, v: i64) {
-		self.put(write_var_long(v).to_vec());
+		self.put(write_var_long(v));
 	}
 	pub fn feof(&self) -> bool {
 		return self.get_buffer().len() < self.get_offset();
