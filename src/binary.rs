@@ -42,13 +42,13 @@ pub fn read_triad(bytes: Vec<u8>, endian: Endian) -> i32 {
 	let mut bytes: Vec<u8> = Vec::from(bytes);
 	match endian {
 		Endian::Big => {
+			bytes.reverse();
 			bytes.push(0);
+			bytes.reverse();
 			return Cursor::read_i32::<BigEndian>(&mut Cursor::new(bytes)).unwrap()
 		},
 		Endian::Little => {
-			bytes.reverse();
 			bytes.push(0);
-			bytes.reverse();
 			return Cursor::read_i32::<LittleEndian>(&mut Cursor::new(bytes)).unwrap()
 		}
 	}
@@ -58,13 +58,13 @@ pub fn read_unsigned_triad(bytes: Vec<u8>, endian: Endian) -> u32 {
 	let mut bytes: Vec<u8> = Vec::from(bytes);
 	match endian {
 		Endian::Big => {
+			bytes.reverse();
 			bytes.push(0);
+			bytes.reverse();
 			return Cursor::read_u32::<BigEndian>(&mut Cursor::new(bytes)).unwrap()
 		},
 		Endian::Little => {
-			bytes.reverse();
 			bytes.push(0);
-			bytes.reverse();
 			return Cursor::read_u32::<LittleEndian>(&mut Cursor::new(bytes)).unwrap()
 		}
 	}
@@ -75,13 +75,13 @@ pub fn write_triad(v: i32, endian: Endian) -> Vec<u8> {
 	match endian {
 		Endian::Big => {
 			bytes.write_i32::<BigEndian>(v).unwrap();
+			bytes.reverse();
 			bytes.truncate(3);
+			bytes.reverse();
 		}
 		Endian::Little => {
 			bytes.write_i32::<LittleEndian>(v).unwrap();
-			bytes.reverse();
 			bytes.truncate(3);
-			bytes.reverse();
 		}
 	}
 	return bytes;
@@ -92,13 +92,13 @@ pub fn write_unsigned_triad(v: u32, endian: Endian) -> Vec<u8> {
 	match endian {
 		Endian::Big => {
 			bytes.write_u32::<BigEndian>(v).unwrap();
+			bytes.reverse();
 			bytes.truncate(3);
+			bytes.reverse();
 		}
 		Endian::Little => {
 			bytes.write_u32::<LittleEndian>(v).unwrap();
-			bytes.reverse();
 			bytes.truncate(3);
-			bytes.reverse();
 		}
 	}
 	return bytes;
