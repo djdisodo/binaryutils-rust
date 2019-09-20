@@ -81,13 +81,13 @@ pub fn write_triad(v: i32, endian: Endian) -> Vec<u8> {
 			bytes.write_i32::<BigEndian>(v).unwrap();
 			bytes = Vec::from_iter(bytes.drain(..1));
 			bytes[0] = (bytes[0] << 1) >> 1;
-			bytes[0] = bytes[0] | ((v as u8 >> 31) << 3);
+			bytes[0] = bytes[0] | (((v >> 31) as u8) << 3);
 		}
 		Endian::Little => {
 			bytes.write_i32::<LittleEndian>(v).unwrap();
 			bytes.truncate(3);
 			bytes[2] = (bytes[2] << 1) >> 1;
-			bytes[2] = bytes[2] | ((v as u8 >> 31) << 3) as u8;
+			bytes[2] = bytes[2] | (((v >> 31) as u8) << 3);
 		}
 	}
 	return bytes;
