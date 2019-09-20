@@ -209,7 +209,7 @@ pub fn read_var_int(bytes: Vec<u8>, read_bytes : &mut u8 /* stores counts of byt
 pub fn read_unsigned_var_int(bytes: Vec<u8>, read_bytes : &mut u8 /* stores counts of bytes readed (starts from zero) */) -> u32 {
 	let mut v: u32 = 0;
 	for i in 0..5 {
-		if bytes.len() < i {
+		if bytes.len() <= i {
 			panic!("BinaryDataException: No bytes left to read");
 		}
 		v.bitor_assign(((bytes.get(i).unwrap().clone() as u32) & 0x7f) << (i * 7) as u32);
@@ -248,7 +248,7 @@ pub fn read_var_long(bytes: Vec<u8>, read_bytes : &mut u8 /* stores counts of by
 pub fn read_unsigned_var_long(bytes: Vec<u8>, read_bytes : &mut u8 /* stores counts of bytes readed (starts from zero) */) -> u64 {
 	let mut v: u64 = 0;
 	for i in 0..10 {
-		if bytes.len() < i {
+		if bytes.len() <= i {
 			panic!("BinaryDataException: No bytes left to read");
 		}
 		v.bitor_assign(((bytes.get(i).unwrap().clone() as u64) & 0x7f) << (i * 7) as u64);
