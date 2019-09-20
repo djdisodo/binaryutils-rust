@@ -80,7 +80,6 @@ pub fn write_triad(v: i32, endian: Endian) -> Vec<u8> {
 		Endian::Big => {
 			bytes.write_i32::<BigEndian>(v).unwrap();
 			bytes = Vec::from_iter(bytes.drain(..1));
-			bytes.
 			bytes[0] = (bytes[0] << 1) >> 1;
 			bytes[0] = bytes[0] | (((v >> 31) as u8) << 7);
 		}
