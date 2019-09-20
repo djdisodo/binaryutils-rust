@@ -45,13 +45,13 @@ pub fn read_triad(bytes: Vec<u8>, endian: Endian) -> i32 {
 	match endian {
 		Endian::Big => {
 			bytes.reverse();
-			bytes.push((bytes[2] >> 3) << 3);
+			bytes.push((bytes[2] >> 7) << 7);
 			bytes[2] = (bytes[2] << 1) >> 1;
 			bytes.reverse();
 			return Cursor::read_i32::<BigEndian>(&mut Cursor::new(bytes)).unwrap()
 		},
 		Endian::Little => {
-			bytes.push((bytes[2] >> 3) << 3);
+			bytes.push((bytes[2] >> 7) << 7);
 			bytes[2] = (bytes[2] << 1) >> 1;
 			return Cursor::read_i32::<LittleEndian>(&mut Cursor::new(bytes)).unwrap()
 		}
@@ -80,14 +80,15 @@ pub fn write_triad(v: i32, endian: Endian) -> Vec<u8> {
 		Endian::Big => {
 			bytes.write_i32::<BigEndian>(v).unwrap();
 			bytes = Vec::from_iter(bytes.drain(..1));
+			bytes.
 			bytes[0] = (bytes[0] << 1) >> 1;
-			bytes[0] = bytes[0] | (((v >> 31) as u8) << 3);
+			bytes[0] = bytes[0] | (((v >> 31) as u8) << 7);
 		}
 		Endian::Little => {
 			bytes.write_i32::<LittleEndian>(v).unwrap();
 			bytes.truncate(3);
 			bytes[2] = (bytes[2] << 1) >> 1;
-			bytes[2] = bytes[2] | (((v >> 31) as u8) << 3);
+			bytes[2] = bytes[2] | (((v >> 31) as u8) << 7);
 		}
 	}
 	return bytes;
