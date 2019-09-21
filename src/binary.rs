@@ -205,7 +205,8 @@ pub fn write_unsigned_long(v: u64, endian: Endian) -> Vec<u8> {
 
 pub fn read_var_int(buffer: &Vec<u8>, offset : &mut usize) -> i32 {
 	let raw: i32 = read_unsigned_var_int(&buffer, offset) as i32;
-	return (raw >> 1) | (raw << 31);
+	let temp: i32 = (((raw << 31) >> 31) ^ raw) >> 1;
+	return temp ^ (raw & (1 << 31));
 }
 
 pub fn read_unsigned_var_int(buffer: &Vec<u8>, offset : &mut usize) -> u32 {
