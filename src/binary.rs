@@ -39,7 +39,7 @@ pub fn write_unsigned_short(v: u16, endian: Endian) -> Vec<u8> {
 	}
 	return bytes;
 }
-
+/* TODO
 pub fn read_triad(bytes: Vec<u8>, endian: Endian) -> i32 {
 	let mut bytes: Vec<u8> = Vec::from(bytes);
 	match endian {
@@ -57,7 +57,7 @@ pub fn read_triad(bytes: Vec<u8>, endian: Endian) -> i32 {
 		}
 	}
 }
-
+*/
 pub fn read_unsigned_triad(bytes: Vec<u8>, endian: Endian) -> u32 {
 	let mut bytes: Vec<u8> = Vec::from(bytes);
 	match endian {
@@ -73,7 +73,7 @@ pub fn read_unsigned_triad(bytes: Vec<u8>, endian: Endian) -> u32 {
 		}
 	}
 }
-
+/* TODO
 pub fn write_triad(v: i32, endian: Endian) -> Vec<u8> {
 	let mut bytes: Vec<u8> = Vec::new();
 	match endian {
@@ -92,7 +92,7 @@ pub fn write_triad(v: i32, endian: Endian) -> Vec<u8> {
 	}
 	return bytes;
 }
-
+*/
 pub fn write_unsigned_triad(v: u32, endian: Endian) -> Vec<u8> {
 	let mut bytes: Vec<u8> = Vec::new();
 	match endian {

@@ -77,15 +77,19 @@ impl BinaryStream {
 	pub fn put_unsigned_short(&mut self, v: u16, endian: Endian) {
 		self.put(Vec::from(write_unsigned_short(v, endian)));
 	}
+	/* TODO
 	pub fn get_triad(&mut self, endian: Endian) -> i32 {
 		return read_triad(self.get(3), endian);
 	}
+	*/
 	pub fn get_unsigned_triad(&mut self, endian: Endian) -> u32 {
 		return read_unsigned_triad(self.get(3), endian);
 	}
+	/* TODO
 	pub fn put_triad(&mut self, v: i32, endian: Endian) {
 		self.put(write_triad(v, endian));
 	}
+	*/
 	pub fn put_unsigned_triad(&mut self, v: u32, endian: Endian) {
 		self.put(write_unsigned_triad(v, endian));
 	}
