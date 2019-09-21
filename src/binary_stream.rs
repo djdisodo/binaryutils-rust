@@ -1,7 +1,6 @@
 use std::io::Write;
 use std::iter::FromIterator;
 use crate::binary::*;
-use std::ops::Range;
 
 pub struct BinaryStream {
 	buffer: Vec<u8>,
@@ -130,36 +129,28 @@ impl BinaryStream {
 		self.put(write_unsigned_long(v, endian));
 	}
 	pub fn get_unsigned_var_int(&mut self) -> u32 {
-		let mut read_bytes: u8 = 0;
-		let result: u32 = read_unsigned_var_int(Vec::from_iter(self.get_buffer().clone().drain(..self.get_offset())), &mut read_bytes);
-		self.offset += read_bytes as usize;
+		let result: u32 = read_unsigned_var_int(&mut self.buffer, &mut self.offset);
 		return result;
 	}
 	pub fn put_unsigned_var_int(&mut self, v: u32) {
 		self.put(write_unsigned_var_int(v));
 	}
 	pub fn get_var_int(&mut self) -> i32 {
-		let mut read_bytes: u8 = 0;
-		let result: i32 = read_var_int(Vec::from_iter(self.get_buffer().clone().drain(..self.get_offset())), &mut read_bytes);
-		self.offset += read_bytes as usize;
+		let result: i32 = read_var_int(&mut self.buffer, &mut self.offset);
 		return result;
 	}
 	pub fn put_var_int(&mut self, v: i32) {
 		self.put(write_var_int(v));
 	}
 	pub fn get_unsigned_var_long(&mut self) -> u64 {
-		let mut read_bytes: u8 = 0;
-		let result: u64 = read_unsigned_var_long(Vec::from_iter(self.get_buffer().clone().drain(..self.get_offset())), &mut read_bytes);
-		self.offset += read_bytes as usize;
+		let result: u64 = read_unsigned_var_long(&mut self.buffer, &mut self.offset);
 		return result;
 	}
 	pub fn put_unsigned_var_long(&mut self, v: u64) {
 		self.put(write_unsigned_var_long(v));
 	}
 	pub fn get_var_long(&mut self) -> i64 {
-		let mut read_bytes: u8 = 0;
-		let result: i64 = read_var_long(Vec::from_iter(self.get_buffer().clone().drain(..self.get_offset())), &mut read_bytes);
-		self.offset += read_bytes as usize;
+		let result: i64 = read_var_long(&mut self.buffer, &mut self.offset);
 		return result;
 	}
 	pub fn put_var_long(&mut self, v: i64) {

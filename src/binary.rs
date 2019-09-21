@@ -1,6 +1,5 @@
 extern crate byteorder;
 use std::io::Cursor;
-use std::ops::BitOrAssign;
 use self::byteorder::{ReadBytesExt, WriteBytesExt, BigEndian, LittleEndian};
 use std::iter::FromIterator;
 
@@ -204,23 +203,29 @@ pub fn write_unsigned_long(v: u64, endian: Endian) -> Vec<u8> {
 	return bytes;
 }
 
-pub fn read_var_int(bytes: Vec<u8>, read_bytes : &mut u8 /* stores counts of bytes readed (starts from zero) */) -> i32 {
-	let raw: u32 = read_unsigned_var_int(bytes, read_bytes);
+pub fn read_var_int(buffer: &Vec<u8>, offset : &mut usize) -> i32 {
+	let raw: u32 = read_unsigned_var_int(&buffer, offset);
 	let temp: u32 = (((raw << 31) >> 31) ^ raw) >> 1;
 	return (temp ^ (raw & (1 << 31))) as i32;
 }
 
-pub fn read_unsigned_var_int(bytes: Vec<u8>, read_bytes : &mut u8 /* stores counts of bytes readed (starts from zero) */) -> u32 {
+pub fn read_unsigned_var_int(buffer: &Vec<u8>, offset : &mut usize) -> u32 {
 	let mut v: u32 = 0;
-	for i in 0..5 {
-		if bytes.len() <= i {
+	if buffer.len() <= *offset as usize{
+		panic!("BinaryDataException: No bytes left to read");
+	}
+	let mut i : u8 = 0;
+	while i < 28 {
+		if buffer.len() <= *offset as usize{
 			panic!("BinaryDataException: No bytes left to read");
 		}
-		v.bitor_assign(((bytes.get(i).unwrap().clone() as u32) & 0x7f) << (i * 7) as u32);
-		if bytes.get(i).unwrap() & 0x80 == 0 {
-			*read_bytes += i as u8;
+		let b : u8 = buffer[*offset];
+		*offset += 1;
+		v |= ((b & 0x7f) << i) as u32;
+		if (b & 0x80) == 0 {
 			return v;
 		}
+		i += 7;
 	}
 	panic!("BinaryDataException : VarInt did not terminate after 5 bytes!");
 }
@@ -230,36 +235,39 @@ pub fn write_var_int(v: i32) -> Vec<u8> {
 }
 
 pub fn write_unsigned_var_int(mut v: u32) -> Vec<u8> {
-	let mut bytes: Vec<u8> = Vec::new();
+	let mut buf: Vec<u8> = Vec::new();
 	for _i in 0..5 {
 		if (v >> 7) != 0 {
-			bytes.push((v | 0x80) as u8);
+			buf.push((v | 0x80) as u8);
 		} else {
-			bytes.push((v | 0x7f) as u8);
-			return bytes;
+			buf.push((v | 0x7f) as u8);
+			return buf;
 		}
 		v >>= 7;
 	}
-	panic!("InvalidArgumentException : Value too large to ve encoded as a VarInt")
+	panic!("InvalidArgumentException : Value too large to ve encoded as a VarInt");
 }
 
-pub fn read_var_long(bytes: Vec<u8>, read_bytes : &mut u8 /* stores counts of bytes readed (starts from zero) */) -> i64 {
-	let raw: u64 = read_unsigned_var_long(bytes, read_bytes);
+pub fn read_var_long(buffer: &Vec<u8>, offset : &mut usize) -> i64 {
+	let raw: u64 = read_unsigned_var_long(&buffer, offset);
 	let temp: u64 = (((raw << 63) >> 63) ^ raw) >> 1;
 	return (temp ^ (raw & (1 << 63))) as i64;
 }
 
-pub fn read_unsigned_var_long(bytes: Vec<u8>, read_bytes : &mut u8 /* stores counts of bytes readed (starts from zero) */) -> u64 {
+pub fn read_unsigned_var_long(buffer: &Vec<u8>, offset : &mut usize) -> u64 {
 	let mut v: u64 = 0;
-	for i in 0..10 {
-		if bytes.len() <= i {
+	let mut i : u8 = 0;
+	while i <= 63 {
+		if buffer.len() <= *offset as usize{
 			panic!("BinaryDataException: No bytes left to read");
 		}
-		v.bitor_assign(((bytes.get(i).unwrap().clone() as u64) & 0x7f) << (i * 7) as u64);
-		if bytes.get(i).unwrap() & 0x80 == 0 {
-			*read_bytes += i as u8;
+		let b : u8 = buffer[*offset];
+		*offset += 1;
+		v |= ((b & 0x7f) << i) as u64;
+		if (b & 0x80) == 0 {
 			return v;
 		}
+		i += 7;
 	}
 	panic!("BinaryDataException : VarInt did not terminate after 10 bytes!");
 }
@@ -269,13 +277,13 @@ pub fn write_var_long(v: i64) -> Vec<u8> {
 }
 
 pub fn write_unsigned_var_long(mut v: u64) -> Vec<u8> {
-	let mut bytes: Vec<u8> = Vec::new();
+	let mut buf: Vec<u8> = Vec::new();
 	for _i in 0..10 {
 		if (v >> 7) != 0 {
-			bytes.push((v | 0x80) as u8);
+			buf.push((v | 0x80) as u8);
 		} else {
-			bytes.push((v | 0x7f) as u8);
-			return bytes;
+			buf.push((v | 0x7f) as u8);
+			return buf;
 		}
 		v >>= 7;
 	}
