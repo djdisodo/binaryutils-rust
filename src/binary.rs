@@ -250,9 +250,9 @@ pub fn write_unsigned_var_int(mut v: u32) -> Vec<u8> {
 }
 
 pub fn read_var_long(buffer: &Vec<u8>, offset : &mut usize) -> i64 {
-	let raw: u64 = read_unsigned_var_long(&buffer, offset);
-	let temp: u64 = (((raw << 63) >> 63) ^ raw) >> 1;
-	return (temp ^ (raw & (1 << 63))) as i64;
+	let raw: i64 = read_unsigned_var_long(&buffer, offset) as i64;
+	let temp: i64 = (((raw << 63) >> 63) ^ raw) >> 1;
+	return temp ^ (raw & (1 << 63));
 }
 
 pub fn read_unsigned_var_long(buffer: &Vec<u8>, offset : &mut usize) -> u64 {
