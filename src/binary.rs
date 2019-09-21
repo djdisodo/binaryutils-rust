@@ -221,7 +221,7 @@ pub fn read_unsigned_var_int(buffer: &Vec<u8>, offset : &mut usize) -> u32 {
 		}
 		let b : u8 = buffer[*offset];
 		*offset += 1;
-		v |= ((b & 0x7f) << i) as u32;
+		v |= ((b & 0x7f) as u32) << (i as u32);
 		if (b & 0x80) == 0 {
 			return v;
 		}
@@ -263,7 +263,7 @@ pub fn read_unsigned_var_long(buffer: &Vec<u8>, offset : &mut usize) -> u64 {
 		}
 		let b : u8 = buffer[*offset];
 		*offset += 1;
-		v |= ((b & 0x7f) << i) as u64;
+		v |= ((b & 0x7f) as u64) << (i as u64);
 		if (b & 0x80) == 0 {
 			return v;
 		}
