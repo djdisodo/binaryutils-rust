@@ -236,11 +236,12 @@ pub fn write_var_int(v: i32) -> Vec<u8> {
 
 pub fn write_unsigned_var_int(mut v: u32) -> Vec<u8> {
 	let mut buf: Vec<u8> = Vec::new();
+	v &= 0xffffffff;
 	for _i in 0..5 {
 		if (v >> 7) != 0 {
 			buf.push((v | 0x80) as u8);
 		} else {
-			buf.push((v | 0x7f) as u8);
+			buf.push((v & 0x7f) as u8);
 			return buf;
 		}
 		v >>= 7;
@@ -282,7 +283,7 @@ pub fn write_unsigned_var_long(mut v: u64) -> Vec<u8> {
 		if (v >> 7) != 0 {
 			buf.push((v | 0x80) as u8);
 		} else {
-			buf.push((v | 0x7f) as u8);
+			buf.push((v & 0x7f) as u8);
 			return buf;
 		}
 		v >>= 7;
