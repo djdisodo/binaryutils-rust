@@ -39,7 +39,7 @@ impl BinaryStream {
 		if self.get_buffer().len() < (self.get_offset() + len) {
 			panic!("BinaryDataException: No bytes left to read");
 		}
-		let mut result: Vec<u8> = Vec::from_iter(self.get_buffer().drain(self.get_offset()..(self.get_offset() + len)));
+		let mut result: Vec<u8> = Vec::from_iter(self.get_buffer().clone().drain(self.get_offset()..(self.get_offset() + len)));
 		result.truncate(len);
 		self.offset += len;
 		return result;
@@ -48,8 +48,8 @@ impl BinaryStream {
 		if self.get_buffer().len() < self.get_offset() {
 			panic!("BinaryDataException: No bytes left to read");
 		}
-		
-		let v : Vec<u8> = Vec::from_iter(self.get_buffer().drain(self.get_offset()..));
+
+		let v : Vec<u8> = Vec::from_iter(self.get_buffer().clone().drain(self.get_offset()..));
 		self.set_offset(self.get_buffer().len());
 		return v;
 	}
